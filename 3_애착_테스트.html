@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>활동4 — 나의 애착 유형 찾기</title>
+<link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&family=Nanum+Myeongjo:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Nanum Gothic',sans-serif;background:#F8F7FF;min-height:100vh;padding:32px 20px 60px}
+.screen{display:none;max-width:680px;margin:0 auto}
+.screen.active{display:block}
+
+.intro-card{background:white;border-radius:24px;padding:44px 36px;text-align:center;box-shadow:0 4px 24px rgba(139,92,246,.1);border:1px solid #E5E3F0}
+.intro-emoji{font-size:52px;margin-bottom:14px}
+h1{font-size:28px;font-weight:800;color:#1E1B2E;margin-bottom:8px;font-family:'Nanum Myeongjo',serif}
+.intro-sub{font-size:14px;color:#4B4869;line-height:1.7;margin-bottom:28px}
+.info-pills{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:32px}
+.pill{background:#EDE9FE;color:#7C3AED;font-size:12px;font-weight:700;padding:6px 14px;border-radius:99px}
+.btn-start{display:inline-flex;align-items:center;gap:8px;background:#8B5CF6;color:white;border:none;border-radius:16px;padding:16px 40px;font-size:17px;font-weight:800;font-family:'Nanum Gothic',sans-serif;cursor:pointer;transition:.15s;box-shadow:0 4px 16px rgba(139,92,246,.35)}
+.btn-start:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(139,92,246,.4)}
+
+.prog-wrap{margin-bottom:20px}
+.prog-info{display:flex;justify-content:space-between;font-size:12px;font-weight:700;color:#4B4869;margin-bottom:8px}
+.prog-track{height:8px;background:#E5E3F0;border-radius:99px;overflow:hidden}
+.prog-fill{height:100%;background:linear-gradient(90deg,#8B5CF6,#EC4899);border-radius:99px;transition:width .5s cubic-bezier(.4,0,.2,1)}
+
+.page-card{background:white;border-radius:20px;padding:24px 24px 20px;box-shadow:0 4px 20px rgba(0,0,0,.06);border:1px solid #E5E3F0;animation:slideUp .35s ease}
+@keyframes slideUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+
+.scale-legend{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid #F0EEF8}
+.sl-item{font-size:11px;color:#4B4869;font-weight:700;display:flex;align-items:center;gap:5px}
+.sl-num{width:22px;height:22px;border-radius:6px;background:#EDE9FE;color:#7C3AED;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center}
+
+.scale-header{display:flex;align-items:center;gap:6px;margin-bottom:6px}
+.sh-label{font-size:10px;font-weight:700;color:#94A3B8;text-align:center;width:48px;flex-shrink:0;line-height:1.3}
+
+.q-row{display:flex;align-items:center;gap:8px;padding:11px 0;border-bottom:1px solid #F5F3FF;transition:.2s}
+.q-row:last-of-type{border-bottom:none}
+.q-num{width:28px;height:28px;border-radius:8px;background:#EDE9FE;color:#7C3AED;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:.2s}
+.q-text{flex:1;font-size:13px;color:#1E1B2E;line-height:1.5;word-break:keep-all;padding-right:6px}
+.q-btns{display:flex;gap:5px;flex-shrink:0}
+.q-btn{width:48px;height:38px;border-radius:10px;border:2px solid #E5E3F0;background:white;cursor:pointer;font-family:'Nanum Gothic',sans-serif;font-size:13px;font-weight:800;color:#4B4869;transition:.12s;display:flex;align-items:center;justify-content:center}
+.q-btn:hover{border-color:#8B5CF6;background:#EDE9FE;color:#7C3AED}
+.q-btn.sel{border-color:#8B5CF6;background:#8B5CF6;color:white}
+.q-row.unanswered .q-num{background:#FFE8E8;color:#DC2626}
+.q-row.unanswered{background:#FFF9F9;border-radius:10px}
+
+.btn-next{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;margin-top:20px;background:#8B5CF6;color:white;border:none;border-radius:14px;padding:14px;font-size:15px;font-weight:800;font-family:'Nanum Gothic',sans-serif;cursor:pointer;transition:.15s;box-shadow:0 3px 12px rgba(139,92,246,.3)}
+.btn-next:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(139,92,246,.35)}
+
+.result-card{background:white;border-radius:24px;padding:36px 28px;box-shadow:0 4px 24px rgba(0,0,0,.08);border:1px solid #E5E3F0;animation:slideUp .4s ease}
+.result-type-badge{display:inline-block;font-size:14px;font-weight:800;padding:6px 18px;border-radius:99px;margin-bottom:12px}
+.result-type-name{font-size:32px;font-weight:800;font-family:'Nanum Myeongjo',serif;margin-bottom:6px}
+.result-eng{font-size:14px;color:#4B4869;margin-bottom:20px;font-style:italic}
+.scores-row{display:flex;gap:10px;margin-bottom:16px}
+.score-box{flex:1;background:#F8F7FF;border-radius:12px;padding:12px;text-align:center}
+.score-box .sval{font-size:24px;font-weight:800}
+.score-box .slbl{font-size:11px;color:#4B4869;margin-top:2px}
+canvas{border-radius:16px;width:100%;max-width:340px;display:block;margin:0 auto 16px}
+.result-desc{font-size:13px;color:#1E1B2E;line-height:1.8;background:#F8F7FF;border-radius:12px;padding:16px 18px;margin:0 0 12px}
+.result-tip{font-size:12px;color:#4B4869;line-height:1.7;border-left:3px solid;padding:10px 14px;border-radius:0 10px 10px 0;margin-bottom:8px}
+.btn-retry{display:flex;align-items:center;gap:8px;margin:20px auto 0;background:#EDE9FE;color:#7C3AED;border:2px solid #8B5CF6;border-radius:14px;padding:13px 36px;font-size:15px;font-weight:800;font-family:'Nanum Gothic',sans-serif;cursor:pointer;transition:.15s}
+.btn-retry:hover{background:#8B5CF6;color:white}
+</style>
+</head>
+<body>
+
+<div class="screen active" id="sIntro">
+  <div class="intro-card">
+    <div class="intro-emoji">🔍</div>
+    <h1>나의 애착 유형은?</h1>
+    <p class="intro-sub">평소 대인관계에서 나의 솔직한 모습에 가장 가까운<br>번호를 선택해 주세요. 정답은 없어요.</p>
+    <div class="info-pills">
+      <span class="pill">📋 36문항</span>
+      <span class="pill">⏱️ 약 5분</span>
+      <span class="pill">🔒 결과 저장 안 됨</span>
+    </div>
+    <button class="btn-start" onclick="startQuiz()">시작하기 →</button>
+  </div>
+</div>
+
+<div class="screen" id="sQuiz">
+  <div class="prog-wrap">
+    <div class="prog-info">
+      <span id="pLabel">1 / 6 페이지</span>
+      <span id="pPct">0%</span>
+    </div>
+    <div class="prog-track"><div class="prog-fill" id="pFill" style="width:0%"></div></div>
+  </div>
+  <div id="pageCard"></div>
+</div>
+
+<div class="screen" id="sResult">
+  <div class="result-card">
+    <div id="rBadge" class="result-type-badge"></div>
+    <div id="rName" class="result-type-name"></div>
+    <div id="rEng" class="result-eng"></div>
+    <div class="scores-row">
+      <div class="score-box"><div class="sval" id="rAnxiety"></div><div class="slbl">불안 점수</div></div>
+      <div class="score-box"><div class="sval" id="rAvoid"></div><div class="slbl">회피 점수</div></div>
+    </div>
+    <canvas id="qChart" width="340" height="300"></canvas>
+    <div id="rDesc" class="result-desc"></div>
+    <div id="rTips"></div>
+    <button class="btn-retry" onclick="retry()">🔄 다시 하기</button>
+  </div>
+</div>
+
+<script>
+// K-ECR (한국판 친밀관계 경험 척도, Brennan et al. 1998 기반)
+// 홀수 = 회피(avoidance), 짝수 = 불안(anxiety)
+const QS = [
+  {n:1,  text:"나는 가까운 사람에게 속마음을 털어놓는 것이 불편하다.", axis:"avoidance"},
+  {n:2,  text:"나는 가까운 사람이 나를 떠날까봐 걱정이 된다.", axis:"anxiety"},
+  {n:3,  text:"나는 가까운 사람에게 많이 의지하는 것이 불편하다.", axis:"avoidance"},
+  {n:4,  text:"나는 가까운 사람이 나를 진심으로 좋아하지 않을까봐 걱정된다.", axis:"anxiety"},
+  {n:5,  text:"나는 가까운 관계에서 일정한 거리를 유지하려는 편이다.", axis:"avoidance"},
+  {n:6,  text:"나는 가까운 사람이 나에게 관심을 주지 않으면 불안해진다.", axis:"anxiety"},
+  {n:7,  text:"나는 누군가와 너무 가까워지면 불편해진다.", axis:"avoidance"},
+  {n:8,  text:"나는 가까운 사람에게 버림받는 것이 두렵다.", axis:"anxiety"},
+  {n:9,  text:"나는 내가 실제로 느끼는 감정을 가까운 사람에게 잘 보여주지 않는다.", axis:"avoidance"},
+  {n:10, text:"나는 가까운 사람이 나를 거절할까봐 걱정된다.", axis:"anxiety"},
+  {n:11, text:"나는 어려운 일이 있어도 가까운 사람에게 도움을 청하기 어렵다.", axis:"avoidance"},
+  {n:12, text:"가까운 사람이 나에게 화가 나 있으면 나는 매우 불안해진다.", axis:"anxiety"},
+  {n:13, text:"나는 가까운 사람과 생각과 감정을 나누는 것이 어렵다.", axis:"avoidance"},
+  {n:14, text:"나는 가까운 사람이 나를 더 이상 원하지 않게 될까봐 걱정된다.", axis:"anxiety"},
+  {n:15, text:"나는 필요할 때도 가까운 사람에게 기대는 것이 어렵다.", axis:"avoidance"},
+  {n:16, text:"나는 가까운 사람에게 충분히 소중한 존재인지 걱정될 때가 있다.", axis:"anxiety"},
+  {n:17, text:"나는 위로나 조언이 필요해도 가까운 사람에게 부탁하기 꺼려진다.", axis:"avoidance"},
+  {n:18, text:"나는 가까운 사람이 나에게 관심이 없다는 생각을 멈추기가 힘들다.", axis:"anxiety"},
+  {n:19, text:"나는 가까운 관계에서 지나치게 의존하는 것을 원하지 않는다.", axis:"avoidance"},
+  {n:20, text:"나는 가까운 사람과 함께하지 못하면 불안하고 걱정이 된다.", axis:"anxiety"},
+  {n:21, text:"나는 문제가 생기면 혼자 해결하는 것을 선호한다.", axis:"avoidance"},
+  {n:22, text:"나는 가까운 사람이 나를 그만큼 좋아하지 않을까봐 걱정된다.", axis:"anxiety"},
+  {n:23, text:"나는 가까운 사람에게 감정을 표현하는 것이 어색하다.", axis:"avoidance"},
+  {n:24, text:"나는 가까운 사람이 나를 가치 있게 여기는지 걱정이 된다.", axis:"anxiety"},
+  {n:25, text:"나는 가까운 관계에서 독립적이고자 하는 편이다.", axis:"avoidance"},
+  {n:26, text:"나는 가까운 사람이 나를 떠나는 상상을 하면 매우 불안해진다.", axis:"anxiety"},
+  {n:27, text:"나는 가까운 사람이 나에게 너무 의지하는 것이 부담스럽다.", axis:"avoidance"},
+  {n:28, text:"나는 가까운 관계를 유지하기 위해 많은 에너지를 쏟는 편이다.", axis:"anxiety"},
+  {n:29, text:"나는 가까운 사람에게 내 고민을 털어놓는 것을 꺼려한다.", axis:"avoidance"},
+  {n:30, text:"가까운 사람이 나에게 불만을 표현하면 나는 매우 괴롭다.", axis:"anxiety"},
+  {n:31, text:"나는 가까운 관계가 불편하게 느껴지는 경우가 있다.", axis:"avoidance"},
+  {n:32, text:"나는 가까운 사람이 나 없이 즐거운 시간을 보내면 기분이 나빠진다.", axis:"anxiety"},
+  {n:33, text:"나는 가까운 사람에게 마음을 여는 것이 쉽지 않다.", axis:"avoidance"},
+  {n:34, text:"나는 가까운 관계에서 내 감정이 나를 압도하는 경우가 많다.", axis:"anxiety"},
+  {n:35, text:"나는 가까운 사람이 지나치게 가까워지려 하면 물러서고 싶어진다.", axis:"avoidance"},
+  {n:36, text:"나는 가까운 사람이 나에 대해 어떻게 생각하는지 자꾸 신경 쓰인다.", axis:"anxiety"},
+];
+
+const PAGE_SIZE = 6;
+const TOTAL_PAGES = Math.ceil(QS.length / PAGE_SIZE);
+const LABELS = ["전혀 아니다","아니다","그렇다","매우 그렇다"];
+let answers = {}, curPage = 0;
+
+function startQuiz() {
+  answers = {}; curPage = 0;
+  show('sQuiz'); renderPage();
+}
+
+function show(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function renderPage() {
+  const pct = Math.round(curPage / TOTAL_PAGES * 100);
+  document.getElementById('pLabel').textContent = `${curPage+1} / ${TOTAL_PAGES} 페이지`;
+  document.getElementById('pPct').textContent = pct + '%';
+  document.getElementById('pFill').style.width = pct + '%';
+
+  const pageQs = QS.slice(curPage * PAGE_SIZE, (curPage + 1) * PAGE_SIZE);
+  const isLast = curPage === TOTAL_PAGES - 1;
+
+  let html = `<div class="page-card">
+    <div class="scale-legend">
+      ${[1,2,3,4].map((v,i) => `<div class="sl-item"><div class="sl-num">${v}</div>${LABELS[i]}</div>`).join('')}
+    </div>
+    <div class="scale-header">
+      <div style="flex:1;min-width:0"></div>
+      ${[1,2,3,4].map(v => `<div class="sh-label">${v}</div>`).join('')}
+    </div>`;
+
+  pageQs.forEach(q => {
+    const ans = answers[q.n];
+    html += `<div class="q-row" id="qrow-${q.n}">
+      <div class="q-num">${q.n}</div>
+      <div class="q-text">${q.text}</div>
+      <div class="q-btns">
+        ${[1,2,3,4].map(v =>
+          `<button class="q-btn${ans===v?' sel':''}" onclick="setAnswer(${q.n},${v},this)">${v}</button>`
+        ).join('')}
+      </div>
+    </div>`;
+  });
+
+  html += `<button class="btn-next" onclick="nextPage()">
+    ${isLast ? '결과 보기 →' : '다음 →'}
+  </button></div>`;
+
+  const wrap = document.getElementById('pageCard');
+  wrap.innerHTML = html;
+  const card = wrap.querySelector('.page-card');
+  card.style.animation = 'none'; card.offsetHeight; card.style.animation = 'slideUp .35s ease';
+}
+
+function setAnswer(qn, v, btn) {
+  answers[qn] = v;
+  const row = document.getElementById(`qrow-${qn}`);
+  row.classList.remove('unanswered');
+  row.querySelectorAll('.q-btn').forEach(b => b.classList.remove('sel'));
+  btn.classList.add('sel');
+}
+
+function nextPage() {
+  const pageQs = QS.slice(curPage * PAGE_SIZE, (curPage + 1) * PAGE_SIZE);
+  const unanswered = pageQs.filter(q => !answers[q.n]);
+  if (unanswered.length) {
+    unanswered.forEach(q => document.getElementById(`qrow-${q.n}`).classList.add('unanswered'));
+    document.getElementById('pageCard').scrollIntoView({behavior:'smooth'});
+    return;
+  }
+  curPage++;
+  if (curPage < TOTAL_PAGES) renderPage();
+  else calcResult();
+}
+
+function calcResult() {
+  const anxItems   = QS.filter(q => q.axis === 'anxiety');
+  const avoidItems = QS.filter(q => q.axis === 'avoidance');
+  const anxSum  = anxItems.reduce((s, q)  => s + (answers[q.n] || 1), 0);
+  const avoidSum = avoidItems.reduce((s, q) => s + (answers[q.n] || 1), 0);
+  const aNorm = Math.round((anxSum  - 18) / 54 * 100);
+  const bNorm = Math.round((avoidSum - 18) / 54 * 100);
+
+  let name, eng, icon, color, bg, desc, tips;
+  if      (aNorm >= 50 && bNorm < 50)  { name='불안형'; eng='Anxious / Preoccupied';    icon='📡'; color='#92400E'; bg='#FEF3C7'; desc='관계에서 상대의 반응에 매우 민감해요. 거절당할까봐 먼저 확인하게 되고, 혼자 있으면 불안해질 수 있어요. 이건 어릴 때 불일관된 돌봄을 받아서 생긴 자연스러운 반응이에요.'; tips=['상대의 침묵이 항상 거절을 의미하지 않아요. 잠깐 기다려봐요.','안심이 필요할 때 "나 지금 불안해"라고 직접 말해보는 연습을 해봐요.']; }
+  else if (aNorm < 50  && bNorm >= 50) { name='회피형'; eng='Avoidant / Dismissing';    icon='🏔️'; color='#1E3A8A'; bg='#DBEAFE'; desc='혼자 있는 게 편하고, 깊은 친밀감이 오히려 부담스럽게 느껴져요. 도움받는 것을 약함으로 여길 수 있어요. 독립을 소중히 여기는 건 좋지만, 연결도 강함의 한 형태예요.'; tips=['도움받는 것을 약함이 아닌 신뢰의 표현으로 생각해봐요.','감정을 표현할 때 "나는 ~할 때 ~하게 느껴"로 시작해봐요.']; }
+  else if (aNorm >= 50 && bNorm >= 50) { name='혼란형'; eng='Disorganized / Fearful';   icon='🎭'; color='#9F1239'; bg='#FCE7F3'; desc='가까워지고 싶으면서도 상처받을까봐 두렵고, 그 두 마음이 동시에 충돌해요. 이건 가장 복잡한 유형이지만, 가장 많이 성장할 수 있는 유형이기도 해요.'; tips=['감정이 혼란스러울 때 잠깐 멈추고 "나 지금 뭘 원하지?"라고 물어봐요.','신뢰할 수 있는 한 사람과 작은 연결부터 시작해봐요.']; }
+  else                                  { name='안정형'; eng='Secure / Autonomous';       icon='🌳'; color='#065F46'; bg='#D1FAE5'; desc='관계에서 신뢰와 자율성의 균형을 잘 잡고 있어요. 혼자도, 같이도 괜찮고 감정을 적절하게 표현할 수 있어요. 이 유형이 파트너나 친구로 있으면 주변 사람들이 안정감을 느껴요.'; tips=['이 균형이 자연스럽지 않은 사람도 많아요. 주변에 잘 나눠줘요.','관계가 힘들어 보이는 친구에게 먼저 다가가는 사람이 될 수 있어요.']; }
+
+  document.getElementById('rBadge').textContent = `${icon} ${name}`;
+  document.getElementById('rBadge').style.cssText = `background:${bg};color:${color};font-size:14px;font-weight:800;padding:6px 18px;border-radius:99px;margin-bottom:12px;display:inline-block`;
+  document.getElementById('rName').textContent = `${icon} ${name}`;
+  document.getElementById('rName').style.color = color;
+  document.getElementById('rEng').textContent = eng;
+  document.getElementById('rAnxiety').textContent = aNorm + '%';
+  document.getElementById('rAnxiety').style.color = aNorm >= 50 ? '#E11D48' : '#10B981';
+  document.getElementById('rAvoid').textContent = bNorm + '%';
+  document.getElementById('rAvoid').style.color = bNorm >= 50 ? '#3B82F6' : '#10B981';
+  document.getElementById('rDesc').textContent = desc;
+  document.getElementById('rTips').innerHTML = tips.map(t =>
+    `<div class="result-tip" style="border-color:${color};background:${bg}">${t}</div>`).join('');
+  drawChart(aNorm, bNorm, color, icon);
+  show('sResult');
+}
+
+function drawChart(an, av, color, icon) {
+  const c = document.getElementById('qChart');
+  const ctx = c.getContext('2d');
+  const W=340, H=300, pad=48;
+  c.width=W; c.height=H;
+  ctx.clearRect(0,0,W,H);
+  ctx.fillStyle='#F8F7FF';
+  ctx.beginPath(); ctx.roundRect(0,0,W,H,12); ctx.fill();
+  const gx=pad, gy=pad, gw=W-pad*2, gh=H-pad*2;
+  [['#FFFBEB','#FFF1F2'],['#F0FDF4','#EFF6FF']].forEach((row,qy)=>
+    row.forEach((fill,qx)=>{ ctx.fillStyle=fill; ctx.fillRect(gx+qx*gw/2,gy+qy*gh/2,gw/2,gh/2); }));
+  ctx.strokeStyle='#E2E8F0'; ctx.lineWidth=1; ctx.strokeRect(gx,gy,gw,gh);
+  ctx.strokeStyle='#CBD5E1'; ctx.lineWidth=1.5;
+  ctx.beginPath(); ctx.moveTo(gx,gy+gh/2); ctx.lineTo(gx+gw,gy+gh/2); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(gx+gw/2,gy); ctx.lineTo(gx+gw/2,gy+gh); ctx.stroke();
+  ctx.fillStyle='#94A3B8'; ctx.font='bold 10px system-ui';
+  ctx.textAlign='center';
+  ctx.fillText('불안 높음', gx+gw/2, gy-10);
+  ctx.fillText('불안 낮음', gx+gw/2, gy+gh+18);
+  ctx.textAlign='end';   ctx.fillText('회피 낮음', gx-4, gy+gh/2+4);
+  ctx.textAlign='start'; ctx.fillText('회피 높음', gx+gw+4, gy+gh/2+4);
+  ctx.fillStyle='#CBD5E1'; ctx.textAlign='center';
+  ctx.fillText('불안형', gx+gw/4, gy+14);   ctx.fillText('혼란형', gx+gw*3/4, gy+14);
+  ctx.fillText('안정형', gx+gw/4, gy+gh-6); ctx.fillText('회피형', gx+gw*3/4, gy+gh-6);
+  const px = gx + av/100*gw;
+  const py = gy + gh - an/100*gh;
+  ctx.beginPath(); ctx.arc(px,py,20,0,Math.PI*2); ctx.fillStyle=color+'25'; ctx.fill();
+  ctx.beginPath(); ctx.arc(px,py,13,0,Math.PI*2); ctx.fillStyle=color+'55'; ctx.fill();
+  ctx.beginPath(); ctx.arc(px,py,7, 0,Math.PI*2); ctx.fillStyle=color; ctx.fill();
+  ctx.font='18px serif'; ctx.textAlign='center'; ctx.fillText(icon, px, py-22);
+}
+
+function retry() { show('sIntro'); }
+</script>
+</body>
+</html>
